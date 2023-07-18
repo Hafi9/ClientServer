@@ -1,6 +1,6 @@
 ﻿namespace API.Models
 {
-    public class Employee
+    public class Employee : BaseEntity
     {
         public Guid Guid { get; set; }
         public string nik { get; set; }
@@ -11,7 +11,5 @@
         public DateTime HiringDate { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set;}
     }
 }

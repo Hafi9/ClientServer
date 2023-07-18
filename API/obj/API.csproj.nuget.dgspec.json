@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Repos\\ClientServer\\API\\API.csproj": {}
+    "D:\\Git\\ClientServer\\API\\API.csproj": {}
   },
   "projects": {
-    "D:\\Repos\\ClientServer\\API\\API.csproj": {
+    "D:\\Git\\ClientServer\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Repos\\ClientServer\\API\\API.csproj",
+        "projectUniqueName": "D:\\Git\\ClientServer\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "D:\\Repos\\ClientServer\\API\\API.csproj",
+        "projectPath": "D:\\Git\\ClientServer\\API\\API.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Repos\\ClientServer\\API\\obj\\",
+        "outputPath": "D:\\Git\\ClientServer\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
