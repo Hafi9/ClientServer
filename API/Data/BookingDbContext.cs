@@ -15,5 +15,17 @@ namespace API.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<University> Universities { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Employee>()
+                        .HasIndex(e => new
+                        {
+                            e.NIK,
+                            e.Email,
+                            e.PhoneNumber
+                        }).IsUnique();
+        }
     }
 }
