@@ -16,7 +16,7 @@ namespace API.Models
         [Column("status")]
         public StatutsLevel Status { get; set; }
 
-        [Column("remarks", TypeName = "nvarchar(max)")]
+        [Column("remarks")]
         public string Remarks { get; set; }
 
         [Column("room_guid")]
