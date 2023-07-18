@@ -20,5 +20,12 @@ namespace API.Models
 
         [Column("expired_time")]
         public DateTime ExpiredTime { get; set; }
+
+        //cardinally
+        public ICollection<AccountRole> AccountsRoles { get; set;}
+
+        public Employee? Employee { get; set; } 
+
+
     }
 }
