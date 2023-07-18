@@ -31,8 +31,8 @@ namespace API.Models
         [Column("phone_number", TypeName = "nvarchar(20)")]
         public string PhoneNumber { get; set; }
 
-        public ICollection<Education> Educations { get; set; }
-        public Booking? Booking { get; set; }
+        public Education? Education { get; set; }
+        public ICollection<Booking>? Bookings { get; set; }
         public Account? Account { get; set; }
     }
 }

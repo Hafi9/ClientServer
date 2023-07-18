@@ -22,7 +22,7 @@ namespace API.Models
         public DateTime ExpiredTime { get; set; }
 
         //cardinally
-        public ICollection<AccountRole> AccountsRoles { get; set;}
+        public ICollection<AccountRole>? AccountRoles { get; set;}
 
         public Employee? Employee { get; set; } 
 
