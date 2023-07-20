@@ -1,12 +1,9 @@
 ﻿using API.Models;
 
-namespace API.Contracts;
-
-public interface IUniversityRepository
+namespace API.Contracts
 {
-    IEnumerable<University> GetAll();
-    University? GetByGuid(Guid guid);
-    University? Create(University university);
-    bool Update(University university);
-    bool Delete(University university);
+    public interface IUniversityRepository : IApiRepository<University>
+    {
+
+    }
 }
