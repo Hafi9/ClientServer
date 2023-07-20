@@ -5,20 +5,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/education")]
-public class EducationController : ControllerBase
+[Route("api/room")]
+public class RoomController : ControllerBase
 {
-    private readonly IEducationRepository _educationRepository;
+    private readonly IRoomRepository _roomRepository;
 
-    public EducationController(IEducationRepository educationRepository)
+    public RoomController(IRoomRepository roomRepository)
     {
-        _educationRepository = educationRepository;
+        _roomRepository = roomRepository;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var result = _educationRepository.GetAll();
+        var result = _roomRepository.GetAll();
         if (!result.Any())
         {
             return NotFound();
@@ -30,7 +30,7 @@ public class EducationController : ControllerBase
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var result = _educationRepository.GetByGuid(guid);
+        var result = _roomRepository.GetByGuid(guid);
         if (result is null)
         {
             return NotFound();
@@ -40,9 +40,9 @@ public class EducationController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Insert(Education education)
+    public IActionResult Insert(Room room)
     {
-        var result = _educationRepository.Create(education);
+        var result = _roomRepository.Create(room);
         if (result is null)
         {
             return StatusCode(500, "Error Retrieve from database");
@@ -52,15 +52,15 @@ public class EducationController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(Education education)
+    public IActionResult Update(Room room)
     {
-        var check = _educationRepository.GetByGuid(education.Guid);
+        var check = _roomRepository.GetByGuid(room.Guid);
         if (check is null)
         {
             return NotFound("Guid is not found");
         }
 
-        var result = _educationRepository.Update(education);
+        var result = _roomRepository.Update(room);
         if (!result)
         {
             return StatusCode(500, "Error Retrieve from database");
@@ -72,13 +72,13 @@ public class EducationController : ControllerBase
     [HttpDelete]
     public IActionResult Delete(Guid guid)
     {
-        var data = _educationRepository.GetByGuid(guid);
+        var data = _roomRepository.GetByGuid(guid);
         if (data is null)
         {
             return NotFound("Guid is not found");
         }
 
-        var result = _educationRepository.Delete(data);
+        var result = _roomRepository.Delete(data);
         if (!result)
         {
             return StatusCode(500, "Error Retrieve from database");

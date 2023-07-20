@@ -5,20 +5,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/education")]
-public class EducationController : ControllerBase
+[Route("api/employee")]
+public class EmployeeController : ControllerBase
 {
-    private readonly IEducationRepository _educationRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public EducationController(IEducationRepository educationRepository)
+    public EmployeeController(IEmployeeRepository employeeRepository)
     {
-        _educationRepository = educationRepository;
+        _employeeRepository = employeeRepository;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var result = _educationRepository.GetAll();
+        var result = _employeeRepository.GetAll();
         if (!result.Any())
         {
             return NotFound();
@@ -30,7 +30,7 @@ public class EducationController : ControllerBase
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var result = _educationRepository.GetByGuid(guid);
+        var result = _employeeRepository.GetByGuid(guid);
         if (result is null)
         {
             return NotFound();
@@ -40,9 +40,9 @@ public class EducationController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Insert(Education education)
+    public IActionResult Insert(Employee employee)
     {
-        var result = _educationRepository.Create(education);
+        var result = _employeeRepository.Create(employee);
         if (result is null)
         {
             return StatusCode(500, "Error Retrieve from database");
@@ -52,15 +52,15 @@ public class EducationController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(Education education)
+    public IActionResult Update(Employee employee)
     {
-        var check = _educationRepository.GetByGuid(education.Guid);
+        var check = _employeeRepository.GetByGuid(employee.Guid);
         if (check is null)
         {
             return NotFound("Guid is not found");
         }
 
-        var result = _educationRepository.Update(education);
+        var result = _employeeRepository.Update(employee);
         if (!result)
         {
             return StatusCode(500, "Error Retrieve from database");
@@ -72,13 +72,13 @@ public class EducationController : ControllerBase
     [HttpDelete]
     public IActionResult Delete(Guid guid)
     {
-        var data = _educationRepository.GetByGuid(guid);
+        var data = _employeeRepository.GetByGuid(guid);
         if (data is null)
         {
             return NotFound("Guid is not found");
         }
 
-        var result = _educationRepository.Delete(data);
+        var result = _employeeRepository.Delete(data);
         if (!result)
         {
             return StatusCode(500, "Error Retrieve from database");

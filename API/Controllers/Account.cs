@@ -5,20 +5,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/education")]
-public class EducationController : ControllerBase
+[Route("api/account")]
+public class AccountController : ControllerBase
 {
-    private readonly IEducationRepository _educationRepository;
+    private readonly IAccountRepository _accountRepository;
 
-    public EducationController(IEducationRepository educationRepository)
+    public AccountController(IAccountRepository accountRepository)
     {
-        _educationRepository = educationRepository;
+        _accountRepository = accountRepository;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var result = _educationRepository.GetAll();
+        var result = _accountRepository.GetAll();
         if (!result.Any())
         {
             return NotFound();
@@ -30,7 +30,7 @@ public class EducationController : ControllerBase
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var result = _educationRepository.GetByGuid(guid);
+        var result = _accountRepository.GetByGuid(guid);
         if (result is null)
         {
             return NotFound();
@@ -40,9 +40,9 @@ public class EducationController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Insert(Education education)
+    public IActionResult Insert(Account account)
     {
-        var result = _educationRepository.Create(education);
+        var result = _accountRepository.Create(account);
         if (result is null)
         {
             return StatusCode(500, "Error Retrieve from database");
@@ -52,15 +52,15 @@ public class EducationController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(Education education)
+    public IActionResult Update(Account account)
     {
-        var check = _educationRepository.GetByGuid(education.Guid);
+        var check = _accountRepository.GetByGuid(account.Guid);
         if (check is null)
         {
             return NotFound("Guid is not found");
         }
 
-        var result = _educationRepository.Update(education);
+        var result = _accountRepository.Update(account);
         if (!result)
         {
             return StatusCode(500, "Error Retrieve from database");
@@ -72,13 +72,13 @@ public class EducationController : ControllerBase
     [HttpDelete]
     public IActionResult Delete(Guid guid)
     {
-        var data = _educationRepository.GetByGuid(guid);
+        var data = _accountRepository.GetByGuid(guid);
         if (data is null)
         {
             return NotFound("Guid is not found");
         }
 
-        var result = _educationRepository.Delete(data);
+        var result = _accountRepository.Delete(data);
         if (!result)
         {
             return StatusCode(500, "Error Retrieve from database");
