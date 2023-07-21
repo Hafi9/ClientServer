@@ -3,12 +3,16 @@ using API.Data;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Repositories
+namespace API.Repositories;
+
+public class UniversityRepository : ApiRepository<University>, IUniversityRepository
 {
-    public class UniversityRepository : ApiRepository<University>, IUniversityRepository
+    public UniversityRepository(BookingDbContext context) : base(context) { }
+
+    public IEnumerable<University> GetByName(string name)
     {
-        public UniversityRepository(BookingDbContext context) : base(context) { }
-
-
+        return _context.Set<University>()
+                       .Where(university => university.Name.Contains(name))
+                       .ToList();
     }
 }

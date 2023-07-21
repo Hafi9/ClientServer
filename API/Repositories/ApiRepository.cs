@@ -1,5 +1,6 @@
 ﻿using API.Contracts;
 using API.Data;
+using System.Collections;
 
 namespace API.Repositories
 {
@@ -12,7 +13,7 @@ namespace API.Repositories
             _context = context;
         }
 
-        public ICollection<APR> GetAll()
+        public IEnumerable<APR> GetAll()
         {
             return _context.Set<APR>()
                            .ToList();

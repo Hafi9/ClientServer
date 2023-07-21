@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -17,8 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="Services\" />
+    <Folder Include="DTOs\Account\" />
+    <Folder Include="DTOs\AccountRole\" />
+    <Folder Include="DTOs\Employee\" />
+    <Folder Include="DTOs\Room\" />
+    <Folder Include="DTOs\Role\" />
   </ItemGroup>
 
 </Project>
