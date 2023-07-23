@@ -3,8 +3,9 @@ using API.Utilities.Enums;
 
 namespace API.DTOs.Bookings;
 
-public class NewBookingDto
+public class BookingDto
 {
+    public Guid Guid { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public StatutsLevel Status { get; set; }
@@ -12,26 +13,26 @@ public class NewBookingDto
     public Guid RoomGuid { get; set; }
     public Guid EmployeeGuid { get; set; }
 
-    public static implicit operator Booking(NewBookingDto newBookingDto)
+    public static implicit operator Booking(BookingDto bookingDto)
     {
         return new Booking
         {
-            Guid = new Guid(),
-            StartDate = newBookingDto.StartDate,
-            EndDate = newBookingDto.EndDate,
-            Status = newBookingDto.Status,
-            Remarks = newBookingDto.Remarks,
-            RoomGuid = newBookingDto.RoomGuid,
-            EmployeeGuid = newBookingDto.EmployeeGuid,
-            CreatedDate = DateTime.Now,
+            Guid = bookingDto.Guid,
+            StartDate = bookingDto.StartDate,
+            EndDate = bookingDto.EndDate,
+            Status = bookingDto.Status,
+            Remarks = bookingDto.Remarks,
+            RoomGuid = bookingDto.RoomGuid,
+            EmployeeGuid = bookingDto.EmployeeGuid,
             ModifiedDate = DateTime.Now
         };
     }
 
-    public static explicit operator NewBookingDto(Booking booking)
+    public static explicit operator BookingDto(Booking booking)
     {
-        return new NewBookingDto
+        return new BookingDto
         {
+            Guid = booking.Guid,
             StartDate = booking.StartDate,
             EndDate = booking.EndDate,
             Status = booking.Status,
@@ -40,5 +41,4 @@ public class NewBookingDto
             EmployeeGuid = booking.EmployeeGuid
         };
     }
-
 }

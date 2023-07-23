@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using API.Contracts;
-using API.DTOs.Booking;
 using API.DTOs.Bookings;
 using API.Models;
 
