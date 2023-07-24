@@ -1,14 +1,15 @@
-﻿using API.DTOs.Employees;
+﻿using API.Contracts;
+using API.DTOs.Employees;
 using FluentValidation;
 
 namespace API.Utilities.Validations.Employees
 {
     public class NewEmployeeValidator : AbstractValidator<NewEmployeeDto>
     {
-        public NewEmployeeValidator()
+        private readonly IEmployeeRepository _employeeRepository;
+        public NewEmployeeValidator(IEmployeeRepository  employeeRepository)
         {
-            RuleFor(employee => employee.NIK)
-                .NotEmpty();
+            _employeeRepository = employeeRepository;
 
             RuleFor(employee => employee.FirstName)
                 .NotEmpty();
@@ -18,7 +19,7 @@ namespace API.Utilities.Validations.Employees
                 .LessThanOrEqualTo(DateTime.Now.AddYears(-10));
 
             RuleFor(employee => employee.Gender) 
-                .NotEmpty()
+                .NotNull()
                 .IsInEnum();
 
             RuleFor(employee => employee.HiringDate)
@@ -26,12 +27,20 @@ namespace API.Utilities.Validations.Employees
 
             RuleFor(employee => employee.Email)
                 .NotEmpty()
-                .EmailAddress();
+                .EmailAddress()
+                .Must(IsDuplicateValue);
 
             RuleFor(employee=>employee.PhoneNumber)
                 .NotEmpty()
-                .MaximumLength(20)
-                .Matches("");
+                .MaximumLength(13)
+                .MinimumLength(11)
+                .Matches(@"^\+[0-9]")
+                .Must(IsDuplicateValue);
+        }
+
+        private bool IsDuplicateValue(string arg)
+        {
+            return _employeeRepository.IsNotExist(arg);
         }
     }
 }
