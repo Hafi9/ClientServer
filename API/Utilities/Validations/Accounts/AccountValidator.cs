@@ -9,10 +9,10 @@ public class AccountValidator : AbstractValidator<AccountDto>
     {
         RuleFor(e => e.Password)
             .NotEmpty().WithMessage("Password is required");
-        RuleFor(e => e.Otp)
+        RuleFor(e => e.OTP)
             .NotEmpty().WithMessage("Otp is required");
-        RuleFor(e => e.ExpiredDate)
-            .NotEmpty().WithMessage("Expired Date is required")
+        RuleFor(e => e.ExpiredTime)
+            .NotEmpty().WithMessage("Expired Time is required")
             .GreaterThanOrEqualTo(DateTime.Now.AddYears(10));
 
     }
