@@ -1,33 +1,33 @@
-﻿using System.Net;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using API.Contracts;
-using API.DTOs.Bookings;
+using API.DTOs.Accounts;
 using API.Models;
+using API.Repositories;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-
 [ApiController]
-[Route("api/booking")]
-public class BookingController : ControllerBase
+[Route("api/account")]
+public class AccountController : ControllerBase
 {
-    private readonly BookingService _bookingService;
+    private readonly AccountService _accountService;
 
-    public BookingController(BookingService bookingService)
+    public AccountController(AccountService accountService)
     {
-        _bookingService = bookingService;
+        _accountService = accountService;
     }
-
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var result = _bookingService.GetAll();
+        var result = _accountService.GetAll();
         if (!result.Any())
         {
-            return NotFound(new ResponseHandler<BookingDto>
+            return NotFound(new ResponseHandler<AccountDto>
             {
                 Code = StatusCodes.Status404NotFound,
                 Status = HttpStatusCode.NotFound.ToString(),
@@ -35,7 +35,7 @@ public class BookingController : ControllerBase
             });
         }
 
-        return Ok(new ResponseHandler<IEnumerable<BookingDto>>
+        return Ok(new ResponseHandler<IEnumerable<AccountDto>>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
@@ -45,12 +45,12 @@ public class BookingController : ControllerBase
     }
 
     [HttpGet("{guid}")]
-    public IActionResult GetByGuId(Guid guid)
+    public IActionResult GetByGuid(Guid guid)
     {
-        var result = _bookingService.GetByGuid(guid);
+        var result = _accountService.GetByGuid(guid);
         if (result is null)
         {
-            return NotFound(new ResponseHandler<BookingDto>
+            return NotFound(new ResponseHandler<AccountDto>
             {
                 Code = StatusCodes.Status404NotFound,
                 Status = HttpStatusCode.NotFound.ToString(),
@@ -58,7 +58,7 @@ public class BookingController : ControllerBase
             });
         }
 
-        return Ok(new ResponseHandler<BookingDto>
+        return Ok(new ResponseHandler<AccountDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
@@ -68,12 +68,12 @@ public class BookingController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Insert(NewBookingDto newBookingDto)
+    public IActionResult Insert(NewAccountDto newAccountDto)
     {
-        var result = _bookingService.Create(newBookingDto);
+        var result = _accountService.Create(newAccountDto);
         if (result is null)
         {
-            return StatusCode(500, new ResponseHandler<BookingDto>
+            return StatusCode(500, new ResponseHandler<AccountDto>
             {
                 Code = StatusCodes.Status500InternalServerError,
                 Status = HttpStatusCode.InternalServerError.ToString(),
@@ -81,7 +81,7 @@ public class BookingController : ControllerBase
             });
         }
 
-        return Ok(new ResponseHandler<BookingDto>
+        return Ok(new ResponseHandler<AccountDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
@@ -91,12 +91,12 @@ public class BookingController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(BookingDto bookingDto)
+    public IActionResult Update(AccountDto accountDto)
     {
-        var result = _bookingService.Update(bookingDto);
+        var result = _accountService.Update(accountDto);
         if (result is -1)
         {
-            return NotFound(new ResponseHandler<BookingDto>
+            return NotFound(new ResponseHandler<AccountDto>
             {
                 Code = StatusCodes.Status404NotFound,
                 Status = HttpStatusCode.NotFound.ToString(),
@@ -106,29 +106,51 @@ public class BookingController : ControllerBase
 
         if (result is 0)
         {
-            return StatusCode(500, new ResponseHandler<BookingDto>
+            return StatusCode(500, new ResponseHandler<AccountDto>
             {
                 Code = StatusCodes.Status500InternalServerError,
                 Status = HttpStatusCode.InternalServerError.ToString(),
                 Message = "Error retrieve from database"
             });
         }
-
-        return Ok(new ResponseHandler<BookingDto>
+        return Ok(new ResponseHandler<AccountDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
             Message = "Update success"
+        });
+
+    }
+
+    [HttpPost("login")]
+    public IActionResult Login(LoginDto loginDto)
+    {
+        var result = _accountService.Login(loginDto);
+        if (result is 0)
+        {
+            return NotFound(new ResponseHandler<LoginDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Email or Password is incorrect"
+            });
+        }
+
+        return Ok(new ResponseHandler<LoginDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Login Success"
         });
     }
 
     [HttpDelete]
     public IActionResult Delete(Guid guid)
     {
-        var result = _bookingService.Delete(guid);
+        var result = _accountService.Delete(guid);
         if (result is -1)
         {
-            return NotFound(new ResponseHandler<BookingDto>
+            return NotFound(new ResponseHandler<AccountDto>
             {
                 Code = StatusCodes.Status404NotFound,
                 Status = HttpStatusCode.NotFound.ToString(),
@@ -138,7 +160,7 @@ public class BookingController : ControllerBase
 
         if (result is 0)
         {
-            return StatusCode(500, new ResponseHandler<BookingDto>
+            return StatusCode(500, new ResponseHandler<AccountDto>
             {
                 Code = StatusCodes.Status500InternalServerError,
                 Status = HttpStatusCode.InternalServerError.ToString(),
@@ -146,13 +168,11 @@ public class BookingController : ControllerBase
             });
         }
 
-        return Ok(new ResponseHandler<BookingDto>
+        return Ok(new ResponseHandler<AccountDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
             Message = "Delete success"
         });
     }
-
-
 }

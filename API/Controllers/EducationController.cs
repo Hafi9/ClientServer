@@ -1,92 +1,151 @@
-﻿using API.DTOs.Educations;
+﻿using System.Net;
+using API.Contracts;
+using API.DTOs.Bookings;
+using API.DTOs.Educations;
 using API.Models;
 using API.Services;
+using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
-namespace API.Controllers
+namespace API.Controllers;
+
+[ApiController]
+[Route("api/education")]
+public class EducationController : ControllerBase
 {
-    [ApiController]
-    [Route("api/education")]
-    public class EducationController : ControllerBase
+    private readonly EducationService _educationService;
+
+    public EducationController(EducationService educationService)
     {
-        private readonly EducationService _educationService;
+        _educationService = educationService;
+    }
 
-        public EducationController(EducationService educationService)
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        var result = _educationService.GetAll();
+        if (!result.Any())
         {
-            _educationService = educationService;
+            return NotFound(new ResponseHandler<EducationDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Data is not found"
+            });
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
+        return Ok(new ResponseHandler<IEnumerable<EducationDto>>
         {
-            var result = _educationService.GetAll();
-            if (!result.Any())
-            {
-                return NotFound("No data found");
-            }
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Success retrieve data",
+            Data = result
+        });
+    }
 
-            return Ok(result);
+    [HttpGet("{guid}")]
+    public IActionResult GetByGuid(Guid guid)
+    {
+        var result = _educationService.GetByGuid(guid);
+        if (result is null)
+        {
+            return NotFound(new ResponseHandler<BookingDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Guid is not found"
+            });
         }
 
-        [HttpGet("{guid}")]
-        public IActionResult GetByGuid(Guid guid)
+        return Ok(new ResponseHandler<EducationDto>
         {
-            var result = _educationService.GetByGuid(guid);
-            if (result is null)
-            {
-                return NotFound("Guid is not found");
-            }
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Success retrieve data",
+            Data = result
+        });
+    }
 
-            return Ok(result);
+    [HttpPost]
+    public IActionResult Insert(NewEducationDto newEducationDto)
+    {
+        var result = _educationService.Create(newEducationDto);
+        if (result is null)
+        {
+            return StatusCode(500, new ResponseHandler<EducationDto>
+            {
+                Code = StatusCodes.Status500InternalServerError,
+                Status = HttpStatusCode.InternalServerError.ToString(),
+                Message = "Error retrieve from database"
+            });
         }
 
-        [HttpPost]
-        public IActionResult Insert(NewEducationDto newEducationDto)
+        return Ok(new ResponseHandler<EducationDto>
         {
-            var result = _educationService.Create(newEducationDto);
-            if (result is null)
-            {
-                return StatusCode(500, "Error Retrieve from database");
-            }
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Success retrieve data",
+            Data = result
+        });
+    }
 
-            return Ok(result);
-        }
-
-        [HttpPut]
-        public IActionResult Update(EducationDto educationDto)
+    [HttpPut]
+    public IActionResult Update(EducationDto educationDto)
+    {
+        var result = _educationService.Update(educationDto);
+        if (result is -1)
         {
-            var result = _educationService.Update(educationDto);
-
-            if (result is -1)
+            return NotFound(new ResponseHandler<BookingDto>
             {
-                return NotFound("Guid is not found");
-            }
-
-            if (result is 0)
-            {
-                return StatusCode(500, "Error Retrieve from database");
-            }
-
-            return Ok("Update success");
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Guid is not found"
+            });
         }
-
-        [HttpDelete("{guid}")]
-        public IActionResult Delete(Guid guid)
+        if (result is 0)
         {
-            var result = _educationService.Delete(guid);
-
-            if (result is -1)
+            return StatusCode(500, new ResponseHandler<EducationDto>
             {
-                return NotFound("Guid is not found");
-            }
-
-            if (result is 0)
-            {
-                return StatusCode(500, "Error Retrieve from database");
-            }
-
-            return Ok("Delete success");
+                Code = StatusCodes.Status500InternalServerError,
+                Status = HttpStatusCode.InternalServerError.ToString(),
+                Message = "Error retrieve from database"
+            });
         }
+        return Ok(new ResponseHandler<EducationDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Update Success"
+        });
+    }
+
+    [HttpDelete]
+    public IActionResult Delete(Guid guid)
+    {
+        var result = _educationService.Delete(guid);
+        if (result is -1)
+        {
+            return NotFound(new ResponseHandler<BookingDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Guid is not found"
+            });
+        }
+        if (result is 0)
+        {
+            return StatusCode(500, new ResponseHandler<EducationDto>
+            {
+                Code = StatusCodes.Status500InternalServerError,
+                Status = HttpStatusCode.InternalServerError.ToString(),
+                Message = "Error retrieve from database"
+            });
+        }
+        return Ok(new ResponseHandler<EducationDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Delete Success"
+        });
     }
 }

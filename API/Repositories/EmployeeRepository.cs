@@ -20,6 +20,10 @@ namespace API.Repositories
             var data = _context.Set<Employee>().OrderByDescending(e => e.CreatedDate).FirstOrDefault().NIK;
             return data;
         }
+        public Employee? GetByEmail(string email)
+        {
+            return _context.Set<Employee>().SingleOrDefault(e => e.Email.Contains(email));
+        }
 
     }
 }

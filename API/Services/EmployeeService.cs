@@ -49,7 +49,7 @@ namespace API.Services
         {
             Employee empNIK = newEmployeeDto;
             empNIK.NIK = GenerateHandler.Nik(_employeeRepository.Getlastnik());
-            var employee = _employeeRepository.Create(newEmployeeDto);
+            var employee = _employeeRepository.Create(empNIK);
             if (employee is null)
             {
                 return null; // Employee is null or not found;
