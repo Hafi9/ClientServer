@@ -4,6 +4,7 @@ using System.Linq;
 using API.Contracts;
 using API.DTOs.Employees;
 using API.Models;
+using API.Utilities.Handlers;
 
 namespace API.Services
 {
@@ -46,6 +47,8 @@ namespace API.Services
 
         public EmployeeDto? Create(NewEmployeeDto newEmployeeDto)
         {
+            Employee empNIK = newEmployeeDto;
+            empNIK.NIK = GenerateHandler.Nik(_employeeRepository.Getlastnik());
             var employee = _employeeRepository.Create(newEmployeeDto);
             if (employee is null)
             {

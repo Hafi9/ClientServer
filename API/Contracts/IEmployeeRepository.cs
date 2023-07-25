@@ -5,6 +5,6 @@ namespace API.Contracts
     public interface IEmployeeRepository : IApiRepository<Employee>
     {
         bool IsNotExist(string value);
-        string GetLastNik();
+        public string? Getlastnik();
     }
 }
