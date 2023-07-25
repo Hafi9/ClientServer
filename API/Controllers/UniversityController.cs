@@ -1,6 +1,7 @@
 ﻿using API.DTOs.Universities;
 using API.Models;
 using API.Services;
+using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -25,7 +26,12 @@ public class UniversityController : ControllerBase
             return NotFound("No data found");
         }
 
-        return Ok(result);
+        return Ok(new ResponseHandler<IEnumerable<UniversityDto>>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = StatusCodes.Status200OK.ToString(),
+            Message = "No Data Found"
+        });
     }
 
     [HttpGet("{guid}")]
