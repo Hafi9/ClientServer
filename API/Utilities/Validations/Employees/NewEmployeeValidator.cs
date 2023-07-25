@@ -37,7 +37,6 @@ namespace API.Utilities.Validations.Employees
                 .Matches(@"^\+[0-9]")
                 .Must(IsDuplicateValue);
         }
-
         private bool IsDuplicateValue(string arg)
         {
             return _employeeRepository.IsNotExist(arg);

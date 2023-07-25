@@ -1,38 +1,39 @@
-﻿using System;
+﻿using API.DTOs.Accounts;
 using API.Models;
 
-namespace API.DTOs.Educations
+namespace API.DTOs.Educations;
+
+public class NewEducationDto
 {
-    public class NewEducationDto
+    public Guid Guid { get; set; }
+    public string Major { get; set; }
+    public string Degree { get; set; }
+    public float GPA { get; set; }
+    public Guid UniversityGuid { get; set; }
+
+    public static implicit operator Education(NewEducationDto newEducationDto)
     {
-        public string Major { get; set; }
-        public string Degree { get; set; }
-        public float GPA { get; set; }
-        public Guid UniversityGuid { get; set; }
-
-        public static implicit operator Education(NewEducationDto newEducationDto)
+        return new Education
         {
-            return new Education
-            {
-                Guid = new Guid(), // Assuming Guid is the primary key of the "Education" entity and generating a new Guid for the new Education entry
-                Major = newEducationDto.Major,
-                Degree = newEducationDto.Degree,
-                GPA = newEducationDto.GPA,
-                UniversityGuid = newEducationDto.UniversityGuid,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now
-            };
-        }
+            Guid = newEducationDto.Guid,
+            Major = newEducationDto.Major,
+            Degree = newEducationDto.Degree,
+            GPA = newEducationDto.GPA,
+            UniversityGuid = newEducationDto.UniversityGuid,
+            CreatedDate = DateTime.Now,
+            ModifiedDate = DateTime.Now
+        };
+    }
 
-        public static explicit operator NewEducationDto(Education education)
+    public static explicit operator NewEducationDto(Education education)
+    {
+        return new NewEducationDto
         {
-            return new NewEducationDto
-            {
-                Major = education.Major,
-                Degree = education.Degree,
-                GPA = education.GPA,
-                UniversityGuid = education.UniversityGuid
-            };
-        }
+            Guid = education.Guid,
+            Major = education.Major,
+            Degree = education.Degree,
+            GPA = education.GPA,
+            UniversityGuid = education.UniversityGuid
+        };
     }
 }
