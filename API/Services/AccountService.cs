@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using API.Contracts;
+using API.Data;
 using API.DTOs.Accounts;
 using API.Models;
 using API.Repositories;
+using API.Utilities.Handlers;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
@@ -12,11 +15,17 @@ namespace API.Services
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IUniversityRepository _universityRepository;
+        private readonly IEducationRepository _educationRepository;
+        private readonly BookingDbContext _dbContext;
 
-        public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository)
+        public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository,IUniversityRepository universityRepository, IEducationRepository educationRepository, BookingDbContext dbContext)
         {
             _accountRepository = accountRepository;
             _employeeRepository = employeeRepository;
+            _universityRepository = universityRepository;
+            _educationRepository = educationRepository;
+            _dbContext = dbContext;
         }
 
         public IEnumerable<AccountDto> GetAll()
@@ -34,6 +43,81 @@ namespace API.Services
             }
 
             return accountDtos; // Account is found;
+        }
+        public int Register(RegisterDto registerDto)
+        {
+            if (!_employeeRepository.IsNotExist(registerDto.Email) || !_employeeRepository.IsNotExist(registerDto.PhoneNumber))
+            {
+                return 0;
+            }
+
+            var newNik = GenerateHandler.Nik(_employeeRepository.Getlastnik());
+            var employeeGuid = Guid.NewGuid();
+
+
+            var employee = new Employee
+            {
+                Guid = employeeGuid,
+                NIK = newNik,
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
+                BirthDate = registerDto.BirthDate,
+                Gender = registerDto.Gender,
+                HiringDate = registerDto.HiringDate,
+                Email = registerDto.Email,
+                PhoneNumber = registerDto.PhoneNumber
+            };
+            _dbContext.Employees.Add(employee);
+
+
+            var education = new Education
+            {
+                Guid = employeeGuid,
+                Major = registerDto.Major,
+                Degree = registerDto.Degree,
+                GPA = (float)registerDto.Gpa
+            };
+            _dbContext.Educations.Add(education);
+
+
+            var existingUniversity = _universityRepository.GetByCode(registerDto.UniversityCode);
+            if (existingUniversity is null)
+            {
+
+                var university = new University
+                {
+                    Code = registerDto.UniversityCode,
+                    Name = registerDto.UniversityName
+                };
+                _dbContext.Universities.Add(university);
+
+
+                education.UniversityGuid = university.Guid;
+            }
+            else
+            {
+
+                education.UniversityGuid = existingUniversity.Guid;
+            }
+
+
+            var account = new Account
+            {
+                Guid = employeeGuid,
+                OTP = registerDto.Otp,
+                Password = registerDto.Password
+            };
+            _dbContext.Accounts.Add(account);
+
+            try
+            {
+                _dbContext.SaveChanges();
+                return 1;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
         }
         public int Login(LoginDto loginDto)
         {

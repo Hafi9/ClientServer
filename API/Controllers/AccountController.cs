@@ -144,6 +144,29 @@ public class AccountController : ControllerBase
         });
     }
 
+    [HttpPost("register")]
+    public IActionResult Register(RegisterDto registerDto)
+    {
+        var data = _accountService.Register(registerDto);
+        if (data == 0)
+        {
+            return StatusCode(500, new ResponseHandler<RegisterDto>
+            {
+                Code = StatusCodes.Status500InternalServerError,
+                Status = HttpStatusCode.InternalServerError.ToString(),
+                Message = "Email or PhoneNumber is already registered.",
+                Data = null
+            });
+        }
+        return Ok(new ResponseHandler<int>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Register success",
+            Data = data
+        });
+    }
+
     [HttpDelete]
     public IActionResult Delete(Guid guid)
     {
