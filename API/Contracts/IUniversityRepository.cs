@@ -7,4 +7,5 @@ public interface IUniversityRepository : IApiRepository<University>
     IEnumerable<University> GetByName(string name);
     University? GetByCode(string code);
     public University? IsExist(string value);
+    public Guid GetLastUniversityGuid();
 }

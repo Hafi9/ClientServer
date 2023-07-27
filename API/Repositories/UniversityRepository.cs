@@ -23,4 +23,8 @@ public class UniversityRepository : ApiRepository<University>, IUniversityReposi
     {
         return _context.Set<University>().SingleOrDefault(u => u.Code == code);
     }
+    public Guid GetLastUniversityGuid()
+    {
+        return _context.Set<University>().ToList().LastOrDefault().Guid;
+    }
 }

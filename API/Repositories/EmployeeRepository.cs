@@ -24,6 +24,15 @@ namespace API.Repositories
         {
             return _context.Set<Employee>().SingleOrDefault(e => e.Email.Contains(email));
         }
+        public Employee? CheckEmail(string email)
+        {
+            return _context.Set<Employee>().FirstOrDefault(u => u.Email == email);
+        }
+
+        public Guid GetLastEmployeeGuid()
+        {
+            return _context.Set<Employee>().ToList().LastOrDefault().Guid;
+        }
 
     }
 }
