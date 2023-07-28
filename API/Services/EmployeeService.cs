@@ -15,6 +15,10 @@ namespace API.Services
         private readonly IEducationRepository _educationRepository;
         private readonly IUniversityRepository _universityRepository;
 
+        public EmployeeService(IEmployeeRepository employeeRepository)
+        {
+            _employeeRepository = employeeRepository;
+        }
         public EmployeeService(IEmployeeRepository employeeRepository, IEducationRepository educationRepository, IUniversityRepository universityRepository)
         {
             _employeeRepository = employeeRepository;

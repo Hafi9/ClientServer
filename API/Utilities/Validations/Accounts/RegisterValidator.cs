@@ -48,7 +48,7 @@ namespace API.Utilities.Validations.Accounts
             RuleFor(e => e.Degree)
                 .NotEmpty();
 
-            RuleFor(e => e.Gpa)
+            RuleFor(e => e.GPA)
                 .NotEmpty();
 
             RuleFor(u => u.UniversityCode)
@@ -56,9 +56,6 @@ namespace API.Utilities.Validations.Accounts
                 .Must(IsDuplicationValue).WithMessage("Email already exist");
 
             RuleFor(u => u.UniversityName)
-                .NotEmpty();
-
-            RuleFor(a => a.Otp)
                 .NotEmpty();
 
             RuleFor(a => a.Password)

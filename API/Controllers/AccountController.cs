@@ -148,7 +148,7 @@ public class AccountController : ControllerBase
     public IActionResult Register(RegisterDto registerDto)
     {
         var data = _accountService.Register(registerDto);
-        if (data == 0)
+        if (data is null)
         {
             return StatusCode(500, new ResponseHandler<RegisterDto>
             {
@@ -158,7 +158,7 @@ public class AccountController : ControllerBase
                 Data = null
             });
         }
-        return Ok(new ResponseHandler<int>
+        return Ok(new ResponseHandler<RegisterDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
@@ -198,7 +198,7 @@ public class AccountController : ControllerBase
         });
     }
 
-    [HttpPost("changePassword")]
+    [HttpPut("changePassword")]
     public IActionResult UpdatePassword(ChangePasswordDto changePasswordDto)
     {
         var update = _accountService.ChangePassword(changePasswordDto);

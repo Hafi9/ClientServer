@@ -17,7 +17,7 @@ namespace API.Repositories
         
         public string? Getlastnik()
         {
-            var data = _context.Set<Employee>().OrderByDescending(e => e.CreatedDate).FirstOrDefault().NIK;
+            var data = _context.Set<Employee>().OrderByDescending(e => e.CreatedDate).LastOrDefault().NIK;
             return data;
         }
         public Employee? GetByEmail(string email)

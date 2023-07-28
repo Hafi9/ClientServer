@@ -14,10 +14,9 @@ public class RegisterDto
     public DateTime HiringDate { get; set; }
     public string Degree { get; set; }
     public string Major { get; set; }
-    public float Gpa { get; set; }
+    public float GPA { get; set; }
     public string UniversityCode { get; set; }
     public string UniversityName { get; set; }
-    public int Otp { get; set; }
     public string Password { get; set; }
     public string ConfirmPassword { get; set; }
 

@@ -101,3 +101,4 @@ D:\Git\ClientServer\API\obj\Debug\net6.0\ref\API.dll
 D:\Git\ClientServer\API\bin\Debug\net6.0\FluentValidation.dll
 D:\Git\ClientServer\API\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
 D:\Git\ClientServer\API\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll
+D:\Git\ClientServer\API\bin\Debug\net6.0\BCrypt.Net-Next.dll

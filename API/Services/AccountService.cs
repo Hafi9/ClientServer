@@ -17,14 +17,16 @@ namespace API.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IUniversityRepository _universityRepository;
         private readonly IEducationRepository _educationRepository;
+        private readonly IEmailHandler _emailHandler;
         private readonly BookingDbContext _dbContext;
 
-        public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository,IUniversityRepository universityRepository, IEducationRepository educationRepository, BookingDbContext dbContext)
+        public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository,IUniversityRepository universityRepository, IEducationRepository educationRepository, IEmailHandler emailHandler, BookingDbContext dbContext)
         {
             _accountRepository = accountRepository;
             _employeeRepository = employeeRepository;
             _universityRepository = universityRepository;
             _educationRepository = educationRepository;
+            _emailHandler = emailHandler;
             _dbContext = dbContext;
         }
 
@@ -44,96 +46,105 @@ namespace API.Services
 
             return accountDtos; // Account is found;
         }
-        public int Register(RegisterDto registerDto)
+        public RegisterDto? Register(RegisterDto registerDto)
         {
-            if (!_employeeRepository.IsNotExist(registerDto.Email) || !_employeeRepository.IsNotExist(registerDto.PhoneNumber))
+            if (!_employeeRepository.IsNotExist(registerDto.Email) ||
+                !_employeeRepository.IsNotExist(registerDto.PhoneNumber))
             {
-                return 0;
+                return null;
             }
 
-            var newNik = GenerateHandler.Nik(_employeeRepository.Getlastnik());
-            var employeeGuid = Guid.NewGuid();
-
-
-            var employee = new Employee
-            {
-                Guid = employeeGuid,
-                NIK = newNik,
-                FirstName = registerDto.FirstName,
-                LastName = registerDto.LastName,
-                BirthDate = registerDto.BirthDate,
-                Gender = registerDto.Gender,
-                HiringDate = registerDto.HiringDate,
-                Email = registerDto.Email,
-                PhoneNumber = registerDto.PhoneNumber
-            };
-            _dbContext.Employees.Add(employee);
-
-
-            var education = new Education
-            {
-                Guid = employeeGuid,
-                Major = registerDto.Major,
-                Degree = registerDto.Degree,
-                GPA = (float)registerDto.Gpa
-            };
-            _dbContext.Educations.Add(education);
-
-
-            var existingUniversity = _universityRepository.GetByCode(registerDto.UniversityCode);
-            if (existingUniversity is null)
-            {
-
-                var university = new University
-                {
-                    Code = registerDto.UniversityCode,
-                    Name = registerDto.UniversityName
-                };
-                _dbContext.Universities.Add(university);
-
-
-                education.UniversityGuid = university.Guid;
-            }
-            else
-            {
-
-                education.UniversityGuid = existingUniversity.Guid;
-            }
-
-
-            var account = new Account
-            {
-                Guid = employeeGuid,
-                OTP = registerDto.Otp,
-                Password = registerDto.Password
-            };
-            _dbContext.Accounts.Add(account);
-
+            using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
-                _dbContext.SaveChanges();
-                return 1;
+                var university = _universityRepository.GetByCode(registerDto.UniversityCode);
+                if (university is null)
+                {
+                    var createUniversity = _universityRepository.Create(new University
+                    {
+                        Code = registerDto.UniversityCode,
+                        Name = registerDto.UniversityName
+                    });
+
+                    university = createUniversity;
+                }
+
+                var newNik =
+                    GenerateHandler.Nik(_employeeRepository
+                                   .Getlastnik()); 
+                var employeeGuid = Guid.NewGuid();
+
+                var employee = _employeeRepository.Create(new Employee
+                {
+                    Guid = employeeGuid,
+                    NIK = newNik,
+                    FirstName = registerDto.FirstName,
+                    LastName = registerDto.LastName,
+                    BirthDate = registerDto.BirthDate,
+                    Gender = registerDto.Gender,
+                    HiringDate = registerDto.HiringDate,
+                    Email = registerDto.Email,
+                    PhoneNumber = registerDto.PhoneNumber
+                });
+
+
+                var education = _educationRepository.Create(new Education
+                {
+                    Guid = employeeGuid,
+                    Major = registerDto.Major,
+                    Degree = registerDto.Degree,
+                    GPA = registerDto.GPA,
+                    UniversityGuid = university.Guid
+                });
+
+                var account = _accountRepository.Create(new Account
+                {
+                    Guid = employeeGuid,
+                    OTP = 1,
+                    IsUsed = true,
+                    Password = HashingHandler.GenerateHash(registerDto.Password)
+                });
+                var data = new RegisterDto
+                {
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    Email = employee.Email,
+                    BirthDate = employee.BirthDate,
+                    PhoneNumber = employee.PhoneNumber,
+                    Gender = employee.Gender,
+                    HiringDate = employee.HiringDate,
+                    Degree = education.Degree,
+                    Major = education.Major,
+                    GPA = education.GPA,
+                    UniversityCode = university.Code,
+                    UniversityName = university.Name
+                };
+                transaction.Commit();
+                return data;
             }
-            catch (Exception)
+            catch
             {
-                return -1;
+                transaction.Rollback();
+                return null;
             }
         }
         public int Login(LoginDto loginDto)
         {
-            var getEmployee = _employeeRepository.GetByEmail(loginDto.Email);
-            if (getEmployee == null)
+            var employeeAccount = from e in _employeeRepository.GetAll()
+                                  join a in _accountRepository.GetAll() on e.Guid equals a.Guid
+                                  where e.Email == loginDto.Email && HashingHandler.ValidateHash(loginDto.Password, a.Password)
+                                  select new LoginDto()
+                                  {
+                                      Email = e.Email,
+                                      Password = a.Password
+                                  };
+
+            if (!employeeAccount.Any())
             {
-                return 0;
+                return -1;
             }
 
-            var getAccount = _accountRepository.GetByGuid(getEmployee.Guid);
-            if (getAccount.Password == loginDto.Password)
-            {
-                return 1;
-            }
-
-            return 0;
+            return 1;
         }
         public int ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {
@@ -165,8 +176,8 @@ namespace API.Services
             {
                 return -1;
             }
-
-            forgotPasswordDto.Email = $"{otp}";
+            _emailHandler.SendEmail(forgotPasswordDto.Email,
+                "Booking - Forgot Password", $"Your Otp is {otp}");
             return 1;
         }
 
@@ -187,7 +198,7 @@ namespace API.Services
                 CreatedDate = getAccount.CreatedDate,
                 OTP = getAccount.OTP,
                 ExpiredTime = getAccount.ExpiredTime,
-                Password = changePasswordDto.NewPassword
+                Password = HashingHandler.GenerateHash(getAccount.Password)
             };
 
             if (getAccount.OTP != changePasswordDto.Otp)
