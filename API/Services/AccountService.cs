@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using API.Contracts;
 using API.Data;
 using API.DTOs.Accounts;
@@ -8,6 +9,7 @@ using API.Models;
 using API.Repositories;
 using API.Utilities.Handlers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Services
 {
@@ -18,9 +20,10 @@ namespace API.Services
         private readonly IUniversityRepository _universityRepository;
         private readonly IEducationRepository _educationRepository;
         private readonly IEmailHandler _emailHandler;
+        private readonly ITokenHandler _tokenHandler;
         private readonly BookingDbContext _dbContext;
 
-        public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository,IUniversityRepository universityRepository, IEducationRepository educationRepository, IEmailHandler emailHandler, BookingDbContext dbContext)
+        public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository, IUniversityRepository universityRepository, IEducationRepository educationRepository, IEmailHandler emailHandler, BookingDbContext dbContext, ITokenHandler tokenHandler)
         {
             _accountRepository = accountRepository;
             _employeeRepository = employeeRepository;
@@ -28,6 +31,7 @@ namespace API.Services
             _educationRepository = educationRepository;
             _emailHandler = emailHandler;
             _dbContext = dbContext;
+            _tokenHandler = tokenHandler;
         }
 
         public IEnumerable<AccountDto> GetAll()
@@ -128,23 +132,34 @@ namespace API.Services
                 return null;
             }
         }
-        public int Login(LoginDto loginDto)
+        public string Login(LoginDto loginDto)
         {
-            var employeeAccount = from e in _employeeRepository.GetAll()
-                                  join a in _accountRepository.GetAll() on e.Guid equals a.Guid
-                                  where e.Email == loginDto.Email && HashingHandler.ValidateHash(loginDto.Password, a.Password)
-                                  select new LoginDto()
-                                  {
-                                      Email = e.Email,
-                                      Password = a.Password
-                                  };
-
-            if (!employeeAccount.Any())
+            var getEmployee = _employeeRepository.GetByEmail(loginDto.Email);
+            if (getEmployee is null)
             {
-                return -1;
+                return "0";
             }
 
-            return 1;
+            var getAccount = _accountRepository.GetByGuid(getEmployee.Guid);
+            var handlerPassword = HashingHandler.ValidateHash(loginDto.Password, getAccount.Password);
+            if (!handlerPassword)
+            {
+                return "0";
+            }
+
+            var claims = new List<Claim>
+        {
+            new Claim("Guid", getEmployee.Guid.ToString()),
+            new Claim("FullName", $"{getEmployee.FirstName} {getEmployee.LastName}"),
+            new Claim("Email", getEmployee.Email)
+        };
+
+            var generatedToken = _tokenHandler.GenerateToken(claims);
+            if (generatedToken is null)
+            {
+                return "-1";
+            }
+            return generatedToken;
         }
         public int ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {

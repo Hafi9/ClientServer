@@ -126,21 +126,34 @@ public class AccountController : ControllerBase
     public IActionResult Login(LoginDto loginDto)
     {
         var result = _accountService.Login(loginDto);
-        if (result is 0)
+        if (result is "0")
         {
             return NotFound(new ResponseHandler<LoginDto>
             {
                 Code = StatusCodes.Status404NotFound,
                 Status = HttpStatusCode.NotFound.ToString(),
-                Message = "Email or Password is incorrect"
+                Message = "Email or password is incorrect"
             });
         }
 
-        return Ok(new ResponseHandler<LoginDto>
+        if (result is "-2")
+        {
+            return StatusCode(500, new ResponseHandler<AccountDto>
+            {
+                Code = StatusCodes.Status500InternalServerError,
+                Status = HttpStatusCode.InternalServerError.ToString(),
+                Message = "Error retrieve from database"
+            });
+        }
+        return Ok(new ResponseHandler<TokenDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
-            Message = "Login Success"
+            Message = "Login success",
+            Data = new TokenDto
+            {
+                Token = result
+            }
         });
     }
 
