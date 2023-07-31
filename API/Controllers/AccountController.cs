@@ -6,12 +6,14 @@ using API.Models;
 using API.Repositories;
 using API.Services;
 using API.Utilities.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/account")]
+[Authorize]
 public class AccountController : ControllerBase
 {
     private readonly AccountService _accountService;
@@ -122,6 +124,7 @@ public class AccountController : ControllerBase
 
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public IActionResult Login(LoginDto loginDto)
     {
@@ -158,6 +161,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
+    [AllowAnonymous]
     public IActionResult Register(RegisterDto registerDto)
     {
         var data = _accountService.Register(registerDto);
@@ -180,6 +184,7 @@ public class AccountController : ControllerBase
         });
     }
     [HttpPost("forgotPassword")]
+    [AllowAnonymous]
     public IActionResult ForgotPassword(ForgotPasswordDto forgotPasswordDto)
     {
         var isUpdate = _accountService.ForgotPassword(forgotPasswordDto);
@@ -212,6 +217,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPut("changePassword")]
+    [AllowAnonymous]
     public IActionResult UpdatePassword(ChangePasswordDto changePasswordDto)
     {
         var update = _accountService.ChangePassword(changePasswordDto);
