@@ -1,16 +1,19 @@
-﻿using System.Net;
+﻿using System.Data;
+using System.Net;
 using API.Contracts;
 using API.DTOs.Bookings;
 using API.DTOs.Educations;
 using API.Models;
 using API.Services;
 using API.Utilities.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/education")]
+[Authorize(Roles = "Employee")]
 public class EducationController : ControllerBase
 {
     private readonly EducationService _educationService;

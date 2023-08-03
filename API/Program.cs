@@ -100,7 +100,23 @@ builder.Services.AddScoped<AccountRoleService>();
 builder.Services.AddFluentValidationAutoValidation()
                 .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = _context =>
+        {
+            var errors = _context.ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(v => v.ErrorMessage);
+            return new BadRequestObjectResult(new ResponseValidationHandler
+            {
+                Code = StatusCodes.Status400BadRequest,
+                Status = HttpStatusCode.BadRequest.ToString(),
+                Message = "Validation Error",
+                Errors = errors.ToArray()
+            });
+        };
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x => {

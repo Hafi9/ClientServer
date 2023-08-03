@@ -1,16 +1,19 @@
-﻿using System.Net;
+﻿using System.Data;
+using System.Net;
 using API.Contracts;
 using API.DTOs.Educations;
 using API.DTOs.Employees;
 using API.Models;
 using API.Services;
 using API.Utilities.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/employee")]
+[Authorize(Roles = "Employee")]
 public class EmployeeController : ControllerBase
 {
     private readonly EmployeeService _employeeService;

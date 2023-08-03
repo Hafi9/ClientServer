@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using API.Contracts;
 using API.Data;
+using API.DTOs.AccountRoles;
 using API.DTOs.Accounts;
 using API.Models;
 using API.Repositories;
@@ -19,11 +21,12 @@ namespace API.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IUniversityRepository _universityRepository;
         private readonly IEducationRepository _educationRepository;
+        private readonly IAccountRoleRepository _accountRoleRepository;
         private readonly IEmailHandler _emailHandler;
         private readonly ITokenHandler _tokenHandler;
         private readonly BookingDbContext _dbContext;
 
-        public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository, IUniversityRepository universityRepository, IEducationRepository educationRepository, IEmailHandler emailHandler, BookingDbContext dbContext, ITokenHandler tokenHandler)
+        public AccountService(IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository, IEmployeeRepository employeeRepository, IUniversityRepository universityRepository, IEducationRepository educationRepository, IEmailHandler emailHandler, BookingDbContext dbContext, ITokenHandler tokenHandler)
         {
             _accountRepository = accountRepository;
             _employeeRepository = employeeRepository;
@@ -32,6 +35,7 @@ namespace API.Services
             _emailHandler = emailHandler;
             _dbContext = dbContext;
             _tokenHandler = tokenHandler;
+            _accountRoleRepository = accountRoleRepository;
         }
 
         public IEnumerable<AccountDto> GetAll()
@@ -106,8 +110,17 @@ namespace API.Services
                     Guid = employeeGuid,
                     OTP = 1,
                     IsUsed = true,
-                    Password = HashingHandler.GenerateHash(registerDto.Password)
+                    Password = HashingHandler.GenerateHash(registerDto.Password),
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now,
+                    ExpiredTime = DateTime.Now
                 });
+
+                var accountRole = _accountRoleRepository.Create(new NewAccountRoleDto
+                {
+
+                });
+
                 var data = new RegisterDto
                 {
                     FirstName = employee.FirstName,

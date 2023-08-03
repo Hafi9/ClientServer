@@ -1,14 +1,17 @@
-﻿using System.Net;
+﻿using System.Data;
+using System.Net;
 using API.Contracts;
 using API.DTOs.Rooms;
 using API.Models;
 using API.Services;
 using API.Utilities.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 [ApiController]
 [Route("api/room")]
+[Authorize(Roles = "Employee")]
 public class RoomController : ControllerBase
 {
     private readonly RoomService _roomService;

@@ -22,7 +22,7 @@ namespace API.DTOs.Accounts
                 Password = accountDto.Password,
                 IsDeleted = accountDto.IsDeleted,
                 OTP = accountDto.OTP,
-                IsUsed = accountDto.IsUsed,
+                IsUsed = false,
                 ExpiredTime = accountDto.ExpiredTime,
                 CreatedDate = accountDto.CreatedDate,
                 ModifiedDate = accountDto.ModifiedDate
