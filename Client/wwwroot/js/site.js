@@ -68,8 +68,64 @@ function extractOnlyFish(animalsList) {
 }
 
 //output
-console.log(animals);
-console.log(extractOnlyCat(animals));
-console.log(extractOnlyFish(animals));
+console.log(animals);//memanggil semua animal
+console.log(extractOnlyCat(animals));//cat saja
+console.log(extractOnlyFish(animals));//fish saja
+
+//asynchronous javascript
+$.ajax({
+    url: "https://swapi.dev/api/people/"
+}).done((result) => {
+    let temp = "";
+    $.each(result.results, (key, val) => {
+        temp += "<li>" + val.name + "</li>";
+    })
+    $("#listSW").html(temp);
+});
+
+//TABEL
+$.ajax({
+    url: "https://swapi.dev/api/people/",
+    method: "GET",
+    success: function (data) {
+        var tbody = document.getElementById("tbodySW");
+        var temp = "";
+
+        var count = 0;
+
+        for (var i = 0; i < data.results.length; i++) {
+            var character = data.results[i];
+            if (character.gender !== "n/a") {
+                count++;
+                if (count > 5) {
+                    break;
+                }
+
+                var row = document.createElement("tr");
+
+                var noCell = document.createElement("td");
+                noCell.textContent = count;
+                row.appendChild(noCell);
+
+                var nameCell = document.createElement("td");
+                nameCell.textContent = character.name;
+                row.appendChild(nameCell);
+
+                var heightCell = document.createElement("td");
+                heightCell.textContent = character.height + " cm";
+                row.appendChild(heightCell);
+
+                var genderCell = document.createElement("td");
+                genderCell.textContent = character.gender;
+                row.appendChild(genderCell);
+
+                tbody.appendChild(row);
+            }
+        }
+    },
+    error: function () {
+        alert("Failed to fetch data from the Star Wars API.");
+    }
+});
 
 
