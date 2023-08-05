@@ -29,3 +29,5 @@ D:\Git\ClientServer\Client\obj\Debug\net6.0\refint\Client.dll
 D:\Git\ClientServer\Client\obj\Debug\net6.0\Client.pdb
 D:\Git\ClientServer\Client\obj\Debug\net6.0\Client.genruntimeconfig.cache
 D:\Git\ClientServer\Client\obj\Debug\net6.0\ref\Client.dll
+D:\Git\ClientServer\Client\bin\Debug\net6.0\dotenv.net.dll
+D:\Git\ClientServer\Client\obj\Debug\net6.0\Client.csproj.CopyComplete

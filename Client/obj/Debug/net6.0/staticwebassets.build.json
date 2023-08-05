@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "uP1vQVuyV1wZbjHKXFm+5TBl9HVGMjqll39tyKdcTyo=",
+  "Hash": "SXeBPhFufmoYkknTDPIe29kd+KL4/r+w0D+mnyXyT74=",
   "Source": "Client",
   "BasePath": "_content/Client",
   "Mode": "Default",
@@ -100,6 +100,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\site.js"
+    },
+    {
+      "Identity": "D:\\Git\\ClientServer\\Client\\wwwroot\\js\\token.env",
+      "SourceId": "Client",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Git\\ClientServer\\Client\\wwwroot\\",
+      "BasePath": "_content/Client",
+      "RelativePath": "js/token.env",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\token.env"
     },
     {
       "Identity": "D:\\Git\\ClientServer\\Client\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",

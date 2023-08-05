@@ -3,48 +3,29 @@
 }
 
 <div class="container">
-    <div class="row">
-        <div class="col">
-            <div id="pokemonList">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>URL</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyPokemon"></tbody>
-                </table>
-            </div>
-            <!-- Modal -->
-            <div class="modal fade" id="modalPokemon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Pokemon Details</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <img id="pokemonImage" src="" alt="Pokemon Image">
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="details">
-                                        <!-- Details will be shown here -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="pokeball-container">
+        <img class="pokeball-image" src="https://cdn.pnghd.pics/data/22/bola-pokemon-png-13.png" alt="Poké Ball">
+        <h1>Pokédex</h1>
+    </div>
+    <table class="pokedex" id="pokedex">
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Number</th>
+        </tr>
+    </table>
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="close" id="close">&times;</span>
+        <h2 id="modal-name"></h2>
+        <img id="modal-image" src="" alt="">
+        <p id="modal-number"></p>
+        <p id="modal-types"></p>
+        <p id="modal-abilities"></p>
+        <p id="modal-hp"></p>
+        <p id="modal-speed"></p>
     </div>
 </div>
+

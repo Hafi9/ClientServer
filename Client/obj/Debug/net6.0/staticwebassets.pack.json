@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
+      "Id": "D:\\Git\\ClientServer\\Client\\wwwroot\\js\\token.env",
+      "PackagePath": "staticwebassets\\js\\token.env"
+    },
+    {
       "Id": "D:\\Git\\ClientServer\\Client\\wwwroot\\lib\\bootstrap\\LICENSE",
       "PackagePath": "staticwebassets\\lib\\bootstrap"
     },

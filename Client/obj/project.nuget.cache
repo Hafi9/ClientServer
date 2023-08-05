@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "qkjM9AcrINNGucRnvT+Ie4YfiMO6Ej6cbr4q7b4ensg+U3HeZsoTLiJsjH7rTNiTjU8I0G9a7L04FKIwiby5Iw==",
+  "dgSpecHash": "+efdxFzKUZ1R3lGZ9qOr8F19ys2FxrzMMp8yPruvztgf3sLtVSSiSAdfAm1gjrxAwkZj9EYeLcvBgsybJukfig==",
   "success": true,
   "projectFilePath": "D:\\Git\\ClientServer\\Client\\Client.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\bisru\\.nuget\\packages\\dotenv.net\\3.1.2\\dotenv.net.3.1.2.nupkg.sha512"
+  ],
   "logs": []
 }
