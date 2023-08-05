@@ -3,7 +3,7 @@
 
 // Write your JavaScript code.
 
-function ChangeColor() {
+/*function ChangeColor() {
     let tes1 = document.getElementById("tes1")
     let randomColor = Math.floor(Math.random() * 16777215).toString(16)
     tes1.style.backgroundColor = "#" + randomColor;
@@ -70,7 +70,7 @@ function extractOnlyFish(animalsList) {
 //output
 console.log(animals);//memanggil semua animal
 console.log(extractOnlyCat(animals));//cat saja
-console.log(extractOnlyFish(animals));//fish saja
+console.log(extractOnlyFish(animals));//fish saja*/
 
 //asynchronous javascript
 $.ajax({
@@ -83,49 +83,40 @@ $.ajax({
     $("#listSW").html(temp);
 });
 
-//TABEL
-$.ajax({
-    url: "https://swapi.dev/api/people/",
-    method: "GET",
-    success: function (data) {
-        var tbody = document.getElementById("tbodySW");
-        var temp = "";
-
-        var count = 0;
-
-        for (var i = 0; i < data.results.length; i++) {
-            var character = data.results[i];
-            if (character.gender !== "n/a") {
-                count++;
-                if (count > 5) {
-                    break;
-                }
-
-                var row = document.createElement("tr");
-
-                var noCell = document.createElement("td");
-                noCell.textContent = count;
-                row.appendChild(noCell);
-
-                var nameCell = document.createElement("td");
-                nameCell.textContent = character.name;
-                row.appendChild(nameCell);
-
-                var heightCell = document.createElement("td");
-                heightCell.textContent = character.height + " cm";
-                row.appendChild(heightCell);
-
-                var genderCell = document.createElement("td");
-                genderCell.textContent = character.gender;
-                row.appendChild(genderCell);
-
-                tbody.appendChild(row);
-            }
-        }
-    },
-    error: function () {
-        alert("Failed to fetch data from the Star Wars API.");
-    }
+$(document).ready(function () {
+    $.ajax({
+        url: "https://pokeapi.co/api/v2/pokemon/"
+    }).done((result) => {
+        let temp = "";
+        $.each(result.results, (key, val) => {
+            temp += `
+                <tr>
+                    <td>${key + 1}</td>
+                    <td>${val.name}</td>
+                    <td>${val.url}</td>
+                    <td>
+                        <button onclick="detailPokemon('${val.url}')" data-bs-toggle="modal" data-bs-target="#modalPokemon" class="btn btn-primary">Detail</button>
+                    </td>
+                </tr>
+            `;
+        })
+        $("#tbodyPokemon").html(temp);
+    });
 });
 
-
+function detailPokemon(stringURL) {
+    $.ajax({
+        url: stringURL,
+        success: (result) => {
+            $('.modal-title').html(result.name);
+            $('#pokemonImage').attr('src', result.sprites.front_default);
+            $('#pokemonImage').css('max-width', '100%');
+            $('.details').html(`
+                <p><strong>Height:</strong> ${result.height}</p>
+                <p><strong>Weight:</strong> ${result.weight}</p>
+                <p><strong>Base Experience:</strong> ${result.base_experience}</p>
+                <!-- Add more details as needed -->
+            `);
+        }
+    });
+}
