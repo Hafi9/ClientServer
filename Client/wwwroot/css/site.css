@@ -58,28 +58,90 @@ body {
 
 /* CSS untuk modal */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    overflow: auto;
-    justify-content: center;
-    align-items: center;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.pokemon-img {
+    width: 250px;
+    height: 250px;
 }
 
+.pokeball-img {
+    width: 100px;
+    height: 100px;
+}
+
+h1.judul {
+    text-align: center;
+}
+
+table.table.dataTable {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.modal-header {
+    background-color: azure;
+}
+
+
+div.modal-footer {
+    background-color: azure;
+}
+
+div.modal-body {
+    background-color: cornsilk;
+}
+
+.dataTables_filter, dataTables_length {
+    padding-bottom: 10px;
+}
 .modal-content {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
     text-align: center;
     position: relative;
-    max-width: 400px; /* Atur ukuran maksimal modal di sini */
-    margin: 0 auto; /* Untuk membuat modal berada di tengah horizontal */
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.stat-label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.stat-value {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+}
+
+.hp {
+    background-color: #FF595E;
+}
+
+.attack {
+    background-color: #FFCA3A;
+}
+
+.defense {
+    background-color: #8AC926;
+}
+
+.special-attack {
+    background-color: #1982C4;
+}
+
+.special-defense {
+    background-color: #6A4C93;
+}
+
+.speed {
+    background-color: #6A4C93;
 }
 
 .close {

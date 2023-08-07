@@ -31,3 +31,4 @@ D:\Git\ClientServer\Client\obj\Debug\net6.0\Client.genruntimeconfig.cache
 D:\Git\ClientServer\Client\obj\Debug\net6.0\ref\Client.dll
 D:\Git\ClientServer\Client\bin\Debug\net6.0\dotenv.net.dll
 D:\Git\ClientServer\Client\obj\Debug\net6.0\Client.csproj.CopyComplete
+D:\Git\ClientServer\Client\obj\Debug\net6.0\scopedcss\Views\Shared\LayoutEmployee.cshtml.rz.scp.css

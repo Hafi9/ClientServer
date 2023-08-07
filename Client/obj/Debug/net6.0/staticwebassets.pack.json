@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\Client.bundle.scp.css"
     },
     {
+      "Id": "D:\\Git\\ClientServer\\Client\\wwwroot\\css\\EmployeeStyle.css",
+      "PackagePath": "staticwebassets\\css\\EmployeeStyle.css"
+    },
+    {
       "Id": "D:\\Git\\ClientServer\\Client\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
@@ -13,12 +17,12 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "D:\\Git\\ClientServer\\Client\\wwwroot\\js\\site.js",
-      "PackagePath": "staticwebassets\\js\\site.js"
+      "Id": "D:\\Git\\ClientServer\\Client\\wwwroot\\js\\Employee.js",
+      "PackagePath": "staticwebassets\\js\\Employee.js"
     },
     {
-      "Id": "D:\\Git\\ClientServer\\Client\\wwwroot\\js\\token.env",
-      "PackagePath": "staticwebassets\\js\\token.env"
+      "Id": "D:\\Git\\ClientServer\\Client\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
       "Id": "D:\\Git\\ClientServer\\Client\\wwwroot\\lib\\bootstrap\\LICENSE",
